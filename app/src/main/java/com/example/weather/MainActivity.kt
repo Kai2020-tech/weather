@@ -1,29 +1,21 @@
 package com.example.weather
 
 import android.annotation.SuppressLint
-import android.app.SearchManager
 import android.content.Context
 import android.content.pm.PackageManager
-import android.database.Cursor
-import android.database.MatrixCursor
 import android.location.Geocoder
 import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
 import android.os.Looper
-import android.provider.BaseColumns
 import android.util.Log
 import android.view.Menu
-import android.view.MenuInflater
-import android.view.View.inflate
 import android.view.inputmethod.InputMethodManager
-import android.widget.AutoCompleteTextView
-import android.widget.SearchView
+//import android.widget.SearchView
+import androidx.appcompat.widget.SearchView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.cursoradapter.widget.CursorAdapter
-import androidx.cursoradapter.widget.SimpleCursorAdapter
 import com.example.weather.network.WeatherApi
 import com.google.android.gms.location.*
 import com.google.android.material.tabs.TabLayoutMediator
@@ -63,12 +55,13 @@ class MainActivity : AppCompatActivity(), ILocationPublisher {
 
         val pageAdapter = PageAdapter(supportFragmentManager, lifecycle)
         viewPager2.adapter = pageAdapter
+        viewPager2.setPageTransformer(ZoomOutPageTransformer())
 
 //        呼叫此函數,讓非當前畫面的Second Fragment也先載入
 //        在Second Fragment的subscribe才會在app啓動時就生效
         viewPager2.offscreenPageLimit = 1
 
-//      viewpager2與tablelayout的title連動
+//      viewpager2與tableLayout的title連動
         val title: ArrayList<String> = arrayListOf("今日", "明日")
 
         TabLayoutMediator(tabLayout, viewPager2) { tab, position ->
@@ -335,15 +328,15 @@ class MainActivity : AppCompatActivity(), ILocationPublisher {
         var cityName: String = ""
         var countryName = ""
         var geoCoder = Geocoder(this, Locale.getDefault())
-        var Adress = geoCoder.getFromLocation(lat, long, 3)
+        var Address = geoCoder.getFromLocation(lat, long, 3)
 
-        cityName = if (Adress.get(0).adminArea.contains("台")) {
-            Adress.get(0).adminArea.replace("台", "臺", false)
+        cityName = if (Address[0].adminArea.contains("台")) {
+            Address[0].adminArea.replace("台", "臺", false)
         } else {
-            Adress.get(0).adminArea
+            Address[0].adminArea
         }
-        countryName = Adress.get(0).countryName
-        Log.d("Debug:", "Your City: " + cityName + " ; your Country " + countryName)
+        countryName = Address[0].countryName
+        Log.d("Debug:", "Your City: $cityName ; your Country $countryName")
         return cityName
     }
 

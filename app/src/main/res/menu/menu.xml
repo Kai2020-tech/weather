@@ -7,6 +7,9 @@
         android:id="@+id/action_search"
         android:icon="@android:drawable/ic_menu_search"
         android:title="Search"
-        app:actionViewClass="android.widget.SearchView"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
         app:showAsAction="always" />
+<!--    2019-04-13: Use app:actionViewClass="androidx.appcompat.widget.SearchView"
+instead of app:actionViewClass="android.widget.SearchView".
+android.widget.SearchView has outdated UI and some UI bugs.-->
 </menu>
